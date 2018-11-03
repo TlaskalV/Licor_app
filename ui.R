@@ -10,7 +10,8 @@ library(tools)
 fluidPage(
   theme = shinytheme("sandstone"),
   title = "Temperature dataloggers",
-  tableOutput("contents3") %>% withSpinner(type = getOption("spinner.type", default = 4)), 
+  plotOutput("contents1") %>% withSpinner(type = getOption("spinner.type", default = 4)), 
+  textOutput("contents2") %>% withSpinner(type = getOption("spinner.type", default = 4)), 
   hr(),
   fluidRow(
     column(3,
@@ -40,10 +41,9 @@ fluidPage(
     ),
     column(4,
            h4("3."),
-           radioButtons("plot_type", "Choose data to plot", 
-                        c("temperature", "moisture", "combined"), 
-                        inline = T,
-                        selected = "temperature"),
+           checkboxGroupInput("plot_type", label = h3("Choose CO2 concetration"), 
+                              choices = list("Soil" = "soil", "Atmospheric" = "atmospheric"),
+                              selected = c("soil", "atmospheric")),
            uiOutput("ui"),
            br(),
            downloadButton("download_plot", 
