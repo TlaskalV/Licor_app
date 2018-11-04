@@ -117,15 +117,6 @@ function(input, output) {
    ggplot_final()
  })
  
- # error timepoints
- output$caption1 <- renderText({
-   "timepoints without values"
- })
- 
- output$contents2 <- renderTable({
-   dataset_date_filtered_mode_bad()
- })
- 
 # download, name of the file according to the date  
  output$download_plot <- downloadHandler(
      filename = function() {
