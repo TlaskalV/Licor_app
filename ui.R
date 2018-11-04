@@ -11,8 +11,6 @@ fluidPage(
   theme = shinytheme("sandstone"),
   title = "Temperature dataloggers",
   plotOutput("contents1") %>% withSpinner(type = getOption("spinner.type", default = 4)), 
-  textOutput("caption1") %>% withSpinner(type = getOption("spinner.type", default = 4)),
-  tableOutput("contents2") %>% withSpinner(type = getOption("spinner.type", default = 4)),
   hr(),
   fluidRow(
     column(3,
