@@ -86,13 +86,13 @@ function(input, output) {
    #temperature_average <- temperature_average()
    ggplot(data = dataset_date_filtered_mode_ok, aes(y = CO2_ppm, x = date_joined_lubridated)) +
    {if (input$plot_type == "atmospheric") {
-     geom_line(aes(colour = flux_type), size = 1.5, alpha = 0.75, subset(dataset_date_filtered_mode_ok, flux_type == "atmospheric"))   
+     geom_line(aes(colour = flux_type), size = 1, alpha = 0.75, subset(dataset_date_filtered_mode_ok, flux_type == "atmospheric"))   
    } else {}} +
    {if (input$plot_type == "soil") {
-     geom_line(aes(colour = flux_type), size = 1.5, alpha = 0.75, subset(dataset_date_filtered_mode_ok, flux_type == "soil"))   
+     geom_line(aes(colour = flux_type), size = 1, alpha = 0.75, subset(dataset_date_filtered_mode_ok, flux_type == "soil"))   
    } else {}} +
    {if (input$plot_type == c("atmospheric", "soil")) {
-     geom_line(aes(colour = flux_type), size = 1.5, alpha = 0.75, subset(dataset_date_filtered_mode_ok, flux_type == "atmospheric" | flux_type == "soil"))   
+     geom_line(aes(colour = flux_type), size = 1, alpha = 0.75, subset(dataset_date_filtered_mode_ok, flux_type == "atmospheric" | flux_type == "soil"))   
    } else {}} +
   scale_color_viridis_d() +
   {if (input$x_scale == "day") {
