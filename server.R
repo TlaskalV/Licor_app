@@ -107,7 +107,7 @@ function(input, output) {
   {if (input$x_scale == "year") {
     scale_x_datetime(date_breaks = "1 year")
   } else {}} +
-  labs(title = input$plot_title, subtitle = paste("mean atmosferic concentration - ", round(flux_average_atm, digits = 1), "ppm\n", "mean soil flux concentration - ", round(flux_average_soil, digits = 1), "ppm"), x = "date", y = expression("CO"[2]^{}*" (ppm)")) +
+  labs(title = input$plot_title, subtitle = paste("mean atmospheric concentration - ", round(flux_average_atm, digits = 1), "ppm\n", "mean soil flux concentration - ", round(flux_average_soil, digits = 1), "ppm"), x = "date", y = expression("CO"[2]^{}*" (ppm)")) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, size = 10, colour = "black"), axis.text.y = element_text(size = 13, colour = "black"), axis.title = element_text(size = 14, face = "bold", colour = "black"), plot.title = element_text(size = 14, face = "bold", colour = "black"),  plot.subtitle = element_text(colour = "black"), panel.grid.minor.y = element_blank(), legend.position = "top", legend.text = element_text(size = 11, colour = "black", face = "plain"), legend.title = element_text(size = 12, colour = "black", face = "bold"), legend.key.size = unit(3, 'lines'), legend.spacing.x = unit(0.3, 'cm'), legend.direction = "horizontal")
  })
