@@ -9,7 +9,7 @@ function(input, output) {
   
   dataset_flux <- reactive({
     validate(
-      need(input$csv_data != "", "Please upload a csv file with temperature data")
+      need(input$csv_data != "", "Please upload a csv file with soil flux data")
     )
     infile = input$csv_data  
     
