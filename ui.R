@@ -20,7 +20,7 @@ fluidPage(
                      'Upload csv file',
                      accept = c('sheetName', 'header'), 
                      multiple = FALSE),
-           p(a("GitHub", href = "https://github.com/Vojczech/TMS_visualization", target="_blank"))
+           p(a("source code on\nGitHub", href = "https://github.com/Vojczech/Soil_flux_app", target="_blank"))
     ),
     column(4, 
            h4("2."),
