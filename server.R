@@ -77,21 +77,27 @@ function(input, output) {
    temp <- mean(dataset_date_filtered_mode_ok$`Temperature (C)`)
  })
  
+ # flux option  
+ flux_type <- renderText({
+   input$plot_type
+ })
+ 
  # ggplot  
  ggplot_final <- reactive({
    dataset_date_filtered_mode_ok <- dataset_date_filtered_mode_ok()
    dataset_date_filtered_mode_ok$flux_type <- factor(dataset_date_filtered_mode_ok$flux_type, levels = c("soil", "atmospheric"))
    flux_average_atm <- flux_average_atm()
    flux_average_soil <- flux_average_soil()
+   flux_type <- flux_type()
    #temperature_average <- temperature_average()
    ggplot(data = dataset_date_filtered_mode_ok, aes(y = CO2_ppm, x = date_joined_lubridated)) +
-   {if (input$plot_type == "atmospheric") {
+   {if (flux_type == "atmospheric") {
      geom_line(aes(colour = flux_type), size = 1, alpha = 0.75, subset(dataset_date_filtered_mode_ok, flux_type == "atmospheric"))   
    } else {}} +
-   {if (input$plot_type == "soil") {
+   {if (flux_type == "soil") {
      geom_line(aes(colour = flux_type), size = 1, alpha = 0.75, subset(dataset_date_filtered_mode_ok, flux_type == "soil"))   
    } else {}} +
-   {if (input$plot_type == c("atmospheric", "soil")) {
+   {if (flux_type == c("atmospheric soil")) {
      geom_line(aes(colour = flux_type), size = 1, alpha = 0.75, subset(dataset_date_filtered_mode_ok, flux_type == "atmospheric" | flux_type == "soil"))   
    } else {}} +
   scale_color_viridis_d() +
