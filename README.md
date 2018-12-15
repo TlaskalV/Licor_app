@@ -1,5 +1,5 @@
 # Soil flux visualization
-Plotting of soil CO<sub>2</sub> flux changes based on concentrations measured with [eosFD device](http://www.eosense.com/products/eosFD/).
+Plotting of soil CO<sub>2</sub> flux changes based on concentrations measured with [eosFD device](http://www.eosense.com/products/eosFD/) from [Eosense](http://www.eosense.com/).
 
 Simply just upload **.csv** file obtained from the eosFD device. Excel table formatting is not necessary. Data can be easily filtered by date directly in the app.
 
@@ -14,4 +14,3 @@ install.packages(c("shiny", "shinythemes", "readr", "tidyverse", "Rmisc", "tools
 library(shiny)
 runGitHub("Soil_flux_app", "Vojczech") 
 ```
----
