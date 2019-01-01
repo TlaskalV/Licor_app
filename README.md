@@ -1,7 +1,11 @@
 # Soil flux visualization
 Plotting of soil CO<sub>2</sub> flux changes based on concentrations measured with [eosFD device](http://www.eosense.com/products/eosFD/) from [Eosense](http://www.eosense.com/).
 
-<img align="right" src="/eosFD.jpg" width="300">
+
+<div align="right">
+    <img src="/pictures/eosFD.jpg?raw=true" width="300px"</img> 
+</div>
+
 
 ## Table of contents
 
@@ -15,7 +19,11 @@ Simply just upload **.csv** file obtained from the eosFD device ([see example cs
 App produces nicely visualized plots. 
 
 ## Example plot
-<img src="/soil_flux_2018-10-24_2018-11-02.png" width="600">
+
+<div align="left">
+    <img src="/pictures/soil_flux_2018-10-24_2018-11-02.png?raw=true" width="600px"</img> 
+</div>
+
 
 ## Where to try app
 
