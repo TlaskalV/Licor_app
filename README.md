@@ -3,7 +3,7 @@ Plotting of soil CO<sub>2</sub> flux changes based on concentrations measured wi
 
 
 <div align="right">
-    <img src="/pictures/eosFD.jpg?raw=true" width="300px"</img> 
+    <img src="/eosFD.jpg?raw=true" width="300px"</img> 
 </div>
 
 
@@ -21,7 +21,7 @@ App produces nicely visualized plots.
 ## Example plot
 
 <div align="left">
-    <img src="/pictures/soil_flux_2018-10-24_2018-11-02.png?raw=true" width="600px"</img> 
+    <img src="/soil_flux_2018-10-24_2018-11-02.png?raw=true" width="600px"</img> 
 </div>
 
 
