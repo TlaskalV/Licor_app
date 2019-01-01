@@ -1,5 +1,6 @@
 # Soil flux visualization
 Plotting of soil CO<sub>2</sub> flux changes based on concentrations measured with [eosFD device](http://www.eosense.com/products/eosFD/) from [Eosense](http://www.eosense.com/).
+
 <img align="right" src="/eosFD.jpg" width="300">
 
 ## Table of contents
