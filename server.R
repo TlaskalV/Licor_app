@@ -138,7 +138,7 @@ function(input, output) {
              legend.direction = "horizontal")
      } else {   # if soil flux should be displayed
        ggplot(data = dataset_date_filtered_mode_ok, aes(y = CO2_ppm, x = date_joined_lubridated)) +
-         geom_line(aes(colour = flux_type), size = 1, alpha = 0.75, subset(dataset_date_filtered_mode_ok, flux_type == "flux")) +
+         geom_col(aes(colour = flux_type), alpha = 0.5, subset(dataset_date_filtered_mode_ok, flux_type == "flux")) +
          scale_color_viridis_d() +
          {if (input$x_scale == "day") {
          scale_x_datetime(date_breaks = "1 day")
