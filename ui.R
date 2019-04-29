@@ -10,7 +10,7 @@ library(tools)
 fluidPage(
   theme = shinytheme("sandstone"),
   title = "Soil CO\u2082 flux data",
-  plotOutput("contents1") %>% withSpinner(type = getOption("spinner.type", default = 4)), 
+  plotOutput("contents1") %>% withSpinner(type = getOption("spinner.type", default = 4)),
   hr(),
   fluidRow(
     column(3,
