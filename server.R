@@ -50,13 +50,17 @@ function(input, output) {
 # timepoints with Mode=0 filtered  
  dataset_date_filtered_mode_ok <- reactive({
    dataset_date_filtered <- dataset_date_filtered()
-   dataset_date_filtered_mode_ok <- dplyr::filter(dataset_date_filtered, Mode == 0) %>% gather(data_type, CO2_ppm, `CO2 Soil (ppm)`, `CO2 ATM (ppm)`) %>% mutate(flux_type = case_when(data_type == "CO2 Soil (ppm)" ~ "soil", data_type == "CO2 ATM (ppm)" ~ "atmospheric"))
+   dataset_date_filtered_mode_ok <- dplyr::filter(dataset_date_filtered, Mode == 0) %>%
+     mutate(CO2_flux = `CO2 Soil (ppm)` - `CO2 ATM (ppm)`) %>% 
+     gather(data_type, CO2_ppm, `CO2 Soil (ppm)`, `CO2 ATM (ppm)`, `CO2_flux`) %>% 
+     mutate(flux_type = case_when(data_type == "CO2 Soil (ppm)" ~ "soil", data_type == "CO2 ATM (ppm)" ~ "atmospheric", data_type == "CO2_flux" ~ "flux"))
  })
  
 # timepoints with Mode!=0 filtered
  dataset_date_filtered_mode_bad <- reactive({
    dataset_date_filtered <- dataset_date_filtered()
-   dataset_date_filtered_mode_bad <- dplyr::filter(dataset_date_filtered, Mode != 0) %>% select(date_joined_lubridated, Mode)
+   dataset_date_filtered_mode_bad <- dplyr::filter(dataset_date_filtered, Mode != 0) %>% 
+     select(date_joined_lubridated, Mode)
  })
  
  # average flux atmospheric  
@@ -68,13 +72,19 @@ function(input, output) {
  # average flux soil  
  flux_average_soil <- reactive({
    flux <- summarySE(dataset_date_filtered_mode_ok(), measurevar = "CO2_ppm", groupvars = "flux_type", conf.interval = 0.95)
-   temp_upper <- flux[[2,3]]
+   temp_upper <- flux[[3,3]]
  })
  
  # average temperature  
  temperature_average <- reactive({
    dataset_date_filtered_mode_ok <- dataset_date_filtered_mode_ok()
    temp <- mean(dataset_date_filtered_mode_ok$`Temperature (C)`)
+ })
+ 
+ # average flux  
+ flux_average <- reactive({
+   flux <- summarySE(dataset_date_filtered_mode_ok(), measurevar = "CO2_ppm", groupvars = "flux_type", conf.interval = 0.95)
+   temp_upper <- flux[[2,3]]
  })
  
  # flux option  
@@ -85,20 +95,18 @@ function(input, output) {
  # ggplot  
  ggplot_final <- reactive({
    dataset_date_filtered_mode_ok <- dataset_date_filtered_mode_ok()
-   dataset_date_filtered_mode_ok$flux_type <- factor(dataset_date_filtered_mode_ok$flux_type, levels = c("soil", "atmospheric"))
+   dataset_date_filtered_mode_ok$flux_type <- factor(dataset_date_filtered_mode_ok$flux_type, levels = c("soil", "atmospheric", "flux"))
    flux_average_atm <- flux_average_atm()
    flux_average_soil <- flux_average_soil()
+   flux_average <- flux_average()
    flux_type <- flux_type()
    #temperature_average <- temperature_average()
    ggplot(data = dataset_date_filtered_mode_ok, aes(y = CO2_ppm, x = date_joined_lubridated)) +
-   {if (flux_type == "atmospheric") {
-     geom_line(aes(colour = flux_type), size = 1, alpha = 0.75, subset(dataset_date_filtered_mode_ok, flux_type == "atmospheric"))   
-   } else {}} +
-   {if (flux_type == "soil") {
-     geom_line(aes(colour = flux_type), size = 1, alpha = 0.75, subset(dataset_date_filtered_mode_ok, flux_type == "soil"))   
-   } else {}} +
-   {if (flux_type == c("atmospheric soil")) {
-     geom_line(aes(colour = flux_type), size = 1, alpha = 0.75, subset(dataset_date_filtered_mode_ok, flux_type == "atmospheric" | flux_type == "soil"))   
+   {if (flux_type == "atmo_soil") {
+     geom_line(aes(colour = flux_type), size = 1, alpha = 0.75, subset(dataset_date_filtered_mode_ok, flux_type == "atmospheric" | flux_type == "soil"))
+     } else {}} +
+   {if (flux_type == c("flux")) {
+     geom_line(aes(colour = flux_type), size = 1, alpha = 0.75, subset(dataset_date_filtered_mode_ok, flux_type == "flux"))   
    } else {}} +
   scale_color_viridis_d() +
   {if (input$x_scale == "day") {
