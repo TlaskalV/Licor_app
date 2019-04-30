@@ -53,7 +53,7 @@ function(input, output) {
    dataset_date_filtered_mode_ok <- dplyr::filter(dataset_date_filtered, Mode == 0) %>%
      mutate(CO2_flux = `CO2 Soil (ppm)` - `CO2 ATM (ppm)`) %>% 
      gather(data_type, CO2_ppm, `CO2 Soil (ppm)`, `CO2 ATM (ppm)`, `CO2_flux`) %>% 
-     mutate(flux_type = case_when(data_type == "CO2 Soil (ppm)" ~ "soil", data_type == "CO2 ATM (ppm)" ~ "atmospheric", data_type == "CO2_flux" ~ "flux"))
+     mutate(concentration = case_when(data_type == "CO2 Soil (ppm)" ~ "soil", data_type == "CO2 ATM (ppm)" ~ "atmospheric", data_type == "CO2_flux" ~ "flux"))
  })
  
 # timepoints with Mode!=0 filtered
@@ -65,13 +65,13 @@ function(input, output) {
  
  # average flux atmospheric  
  flux_average_atm <- reactive({
-   flux <- summarySE(dataset_date_filtered_mode_ok(), measurevar = "CO2_ppm", groupvars = "flux_type", conf.interval = 0.95)
+   flux <- summarySE(dataset_date_filtered_mode_ok(), measurevar = "CO2_ppm", groupvars = "concentration", conf.interval = 0.95)
    temp_upper <- flux[[1,3]]
  })
  
  # average flux soil  
  flux_average_soil <- reactive({
-   flux <- summarySE(dataset_date_filtered_mode_ok(), measurevar = "CO2_ppm", groupvars = "flux_type", conf.interval = 0.95)
+   flux <- summarySE(dataset_date_filtered_mode_ok(), measurevar = "CO2_ppm", groupvars = "concentration", conf.interval = 0.95)
    temp_upper <- flux[[3,3]]
  })
  
@@ -83,27 +83,27 @@ function(input, output) {
  
  # average flux  
  flux_average <- reactive({
-   flux <- summarySE(dataset_date_filtered_mode_ok(), measurevar = "Flux", groupvars = "flux_type", conf.interval = 0.95)
+   flux <- summarySE(dataset_date_filtered_mode_ok(), measurevar = "Flux", groupvars = "concentration", conf.interval = 0.95)
    temp_upper <- flux[[2,3]]
  })
  
  # flux option  
- flux_type <- renderText({
+ concentration <- renderText({
    input$plot_type
  })
  
  # ggplot  
  ggplot_final <- reactive({
    dataset_date_filtered_mode_ok <- dataset_date_filtered_mode_ok()
-   dataset_date_filtered_mode_ok$flux_type <- factor(dataset_date_filtered_mode_ok$flux_type, levels = c("soil", "atmospheric", "flux"))
+   dataset_date_filtered_mode_ok$concentration <- factor(dataset_date_filtered_mode_ok$concentration, levels = c("soil", "atmospheric", "flux"))
    flux_average_atm <- flux_average_atm()
    flux_average_soil <- flux_average_soil()
    flux_average <- flux_average()
-   flux_type <- flux_type()
+   concentration <- concentration()
    #temperature_average <- temperature_average()
-   {if (flux_type == "atmo_soil") {   # if atmo/soil concentration should be displayed
+   {if (concentration == "atmo_soil") {   # if atmo/soil concentration should be displayed
    ggplot(data = dataset_date_filtered_mode_ok, aes(y = CO2_ppm, x = date_joined_lubridated)) +
-       geom_line(aes(colour = flux_type), size = 1, alpha = 0.75, subset(dataset_date_filtered_mode_ok, flux_type == "atmospheric" | flux_type == "soil")) +
+       geom_line(aes(colour = concentration), size = 1, alpha = 0.75, subset(dataset_date_filtered_mode_ok, concentration == "atmospheric" | concentration == "soil")) +
        scale_color_viridis_d() +
        {if (input$x_scale == "day") {
     scale_x_datetime(date_breaks = "1 day")
@@ -119,8 +119,8 @@ function(input, output) {
          } else {}} +
        labs(title = input$plot_title,
             subtitle = paste("mean atmospheric concentration - ",
-                             round(flux_average_atm, digits = 1), "ppm\n", "mean soil concentration - ",
-                             round(flux_average_soil, digits = 1), "ppm"), 
+                             round(flux_average_atm, digits = 1), "ppm CO2\n", "mean soil concentration - ",
+                             round(flux_average_soil, digits = 1), "ppm CO2"), 
             x = "date", 
             y = (expression(paste(CO[2]," (ppm)", sep="")))) +
        theme_bw() +
@@ -135,7 +135,8 @@ function(input, output) {
              legend.title = element_text(size = 12, colour = "black", face = "bold"), 
              legend.key.size = unit(3, 'lines'), 
              legend.spacing.x = unit(0.3, 'cm'), 
-             legend.direction = "horizontal")
+             legend.direction = "horizontal") +
+       guides(fill = guide_legend(title = "concentration"))
      } else {   # if soil flux should be displayed
        ggplot(data = dataset_date_filtered_mode_ok, aes(y = Flux, x = date_joined_lubridated)) +
          geom_col(aes(colour = "#440154"), alpha = 0.5) +
@@ -154,7 +155,7 @@ function(input, output) {
            } else {}} +
          labs(title = input$plot_title,
               subtitle = paste("mean soil flux - ",
-                               round(flux_average, digits = 1), "umol/m2/s"), 
+                               round(flux_average, digits = 1), "umol/m2/s CO2"), 
               x = "date", 
               y = (expression(paste(CO[2]," (", mu, "mol ", m^-2, s^-1,")", sep="")))) +
          theme_bw() +
