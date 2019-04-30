@@ -83,7 +83,7 @@ function(input, output) {
  
  # average flux  
  flux_average <- reactive({
-   flux <- summarySE(dataset_date_filtered_mode_ok(), measurevar = "CO2_ppm", groupvars = "flux_type", conf.interval = 0.95)
+   flux <- summarySE(dataset_date_filtered_mode_ok(), measurevar = "Flux", groupvars = "flux_type", conf.interval = 0.95)
    temp_upper <- flux[[2,3]]
  })
  
@@ -137,8 +137,8 @@ function(input, output) {
              legend.spacing.x = unit(0.3, 'cm'), 
              legend.direction = "horizontal")
      } else {   # if soil flux should be displayed
-       ggplot(data = dataset_date_filtered_mode_ok, aes(y = CO2_ppm, x = date_joined_lubridated)) +
-         geom_col(aes(colour = flux_type), alpha = 0.5, subset(dataset_date_filtered_mode_ok, flux_type == "flux")) +
+       ggplot(data = dataset_date_filtered_mode_ok, aes(y = Flux, x = date_joined_lubridated)) +
+         geom_col(aes(colour = "#440154"), alpha = 0.5) +
          scale_color_viridis_d() +
          {if (input$x_scale == "day") {
          scale_x_datetime(date_breaks = "1 day")
