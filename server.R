@@ -133,7 +133,8 @@ function(input, output) {
             y = (expression(paste(CO[2]," (ppm)", sep="")))) +
        theme_ipsum_rc() +
        theme(legend.position = "top", 
-             legend.direction = "horizontal") +
+             legend.direction = "horizontal",
+             axis.text.x = element_text(angle = 90)) +
        guides(fill = guide_legend(title = "concentration"))
      } else {   # if soil flux should be displayed
        ggplot(data = dataset_date_filtered_mode_ok, aes(y = Flux, x = date_joined_lubridated)) +
@@ -157,7 +158,8 @@ function(input, output) {
               x = "date", 
               y = (expression(paste(CO[2]," (", mu, "mol ", m^-2, s^-1,")", sep="")))) +
          theme_ipsum_rc() +
-         theme(legend.position = "none")
+         theme(legend.position = "none",
+               axis.text.x = element_text(angle = 90))
        }}
    })
   
