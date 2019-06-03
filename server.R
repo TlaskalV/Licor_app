@@ -1,9 +1,17 @@
+# load up the packages
 library(shiny)
 library(shinythemes)
 library(readr)
 library(tidyverse)
 library(Rmisc)
 library(tools)
+require(showtext)
+library(hrbrthemes)
+
+# download a webfont
+font_add_google(name = "Roboto Condensed", family = "Roboto Condensed",
+                regular.wt = 400, bold.wt = 700)
+showtext_auto()
 
 function(input, output) {
   
@@ -123,18 +131,8 @@ function(input, output) {
                              round(flux_average_soil, digits = 1), "ppm CO2"), 
             x = "date", 
             y = (expression(paste(CO[2]," (ppm)", sep="")))) +
-       theme_bw() +
-       theme(axis.text.x = element_text(angle = 90, size = 10, colour = "black"), 
-             axis.text.y = element_text(size = 13, colour = "black"), 
-             axis.title = element_text(size = 14, face = "bold", colour = "black"), 
-             plot.title = element_text(size = 14, face = "bold", colour = "black"),  
-             plot.subtitle = element_text(colour = "black"), 
-             panel.grid.minor.y = element_blank(), 
-             legend.position = "top", 
-             legend.text = element_text(size = 11, colour = "black", face = "plain"), 
-             legend.title = element_text(size = 12, colour = "black", face = "bold"), 
-             legend.key.size = unit(3, 'lines'), 
-             legend.spacing.x = unit(0.3, 'cm'), 
+       theme_ipsum_rc() +
+       theme(legend.position = "top", 
              legend.direction = "horizontal") +
        guides(fill = guide_legend(title = "concentration"))
      } else {   # if soil flux should be displayed
@@ -158,19 +156,8 @@ function(input, output) {
                                round(flux_average, digits = 1), "umol/m2/s CO2"), 
               x = "date", 
               y = (expression(paste(CO[2]," (", mu, "mol ", m^-2, s^-1,")", sep="")))) +
-         theme_bw() +
-         theme(axis.text.x = element_text(angle = 90, size = 10, colour = "black"), 
-               axis.text.y = element_text(size = 13, colour = "black"), 
-               axis.title = element_text(size = 14, face = "bold", colour = "black"), 
-               plot.title = element_text(size = 14, face = "bold", colour = "black"),  
-               plot.subtitle = element_text(colour = "black"), 
-               panel.grid.minor.y = element_blank(), 
-               legend.position = "none", 
-               legend.text = element_text(size = 11, colour = "black", face = "plain"), 
-               legend.title = element_text(size = 12, colour = "black", face = "bold"), 
-               legend.key.size = unit(3, 'lines'), 
-               legend.spacing.x = unit(0.3, 'cm'), 
-               legend.direction = "horizontal")
+         theme_ipsum_rc() +
+         theme(legend.position = "none")
        }}
    })
   
