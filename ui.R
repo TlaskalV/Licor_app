@@ -8,6 +8,7 @@ library(Rmisc)
 library(tools)
 require(showtext)
 library(hrbrthemes)
+library(fontawesome)
 
 # download a webfont
 font_add_google(name = "Roboto Condensed", family = "Roboto Condensed",
@@ -24,10 +25,10 @@ fluidPage(
            h3("Soil CO\u2082 flux data"),
            h4("1."),
            fileInput('csv_data', 
-                     'Upload csv file',
+                     label = list(icon("table"), "Upload csv file"),
                      accept = c('sheetName', 'header'), 
                      multiple = FALSE),
-           p(a("source code on\nGitHub", href = "https://github.com/Vojczech/Soil_flux_app", target="_blank"))
+           p(a(list(icon("github"), "Source code"), href = "https://github.com/Vojczech/Soil_flux_app", target="_blank"))
     ),
     column(4, 
            h4("2."),
@@ -35,7 +36,7 @@ fluidPage(
            textInput("plot_title", 'Write plot title',
                      placeholder = "e.g. nitrogen addition treatment"),
            dateRangeInput('date_range',
-                          label = 'Filter by date',
+                          label = list(icon("calendar-alt"), "Filter by date"),
                           start = Sys.Date() - 3, end = Sys.Date(),
                           separator = " to ", format = "yy/mm/dd",
                           startview = 'month', language = 'en', weekstart = 1
@@ -47,9 +48,10 @@ fluidPage(
     ),
     column(4,
            h4("3."),
-           radioButtons("plot_type", label = "Choose plot type", 
-                              choices = c("atmospheric/soil concentration" = "atmo_soil", "soil flux" = "flux"),
-                              selected = c("flux")),
+           radioButtons("plot_type", 
+                        label = list(icon("chart-area"), "Choose plot type"), 
+                        choices = c("atmospheric/soil concentration" = "atmo_soil", "soil flux" = "flux"),
+                        selected = c("flux")),
            uiOutput("ui"),
            br(),
            downloadButton("download_plot", 
