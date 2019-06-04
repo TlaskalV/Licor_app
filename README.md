@@ -36,7 +36,8 @@ There are two options to access the app:
 * online web app hosted on [labenvmicro.shinyapps.io](https://labenvmicro.shinyapps.io/Soil_flux_app/) 
 * or start your local installation of **R** language and paste following code which automatically downloads prerequisties and starts app:
 ```
-install.packages(c("shiny", "shinythemes", "readr", "tidyverse", "Rmisc", "tools", "shinycssloaders", "showtext", "hrbrthemes"))
+install.packages(c("shiny", "shinythemes", "readr", "tidyverse", "Rmisc", "tools", "shinycssloaders", "showtext", "hrbrthemes", "devtools"))
+devtools::install_github("rstudio/fontawesome")
 library(shiny)
 runGitHub("Soil_flux_app", "Vojczech") 
 ```
