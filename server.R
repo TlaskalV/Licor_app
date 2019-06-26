@@ -7,6 +7,7 @@ library(Rmisc)
 library(tools)
 require(showtext)
 library(hrbrthemes)
+library(svglite)
 
 # download a webfont
 font_add_google(name = "Roboto Condensed", family = "Roboto Condensed",
@@ -171,11 +172,32 @@ function(input, output) {
 # download, name of the file according to the date  
  output$download_plot <- downloadHandler(
      filename = function() {
-       paste("soil_flux_", input$date_range[1], "_", input$date_range[2], sep = "", ".pdf")
-     },
+       {if (input$download_extension == "pdf") {
+         paste("soil_flux_", input$date_range[1], "_", input$date_range[2], sep = "", ".pdf")
+       } else {
+         if (input$download_extension == "png") {
+           paste("soil_flux_", input$date_range[1], "_", input$date_range[2], sep = "", ".png")
+           } else {
+             if (input$download_extension == "svg") {
+             paste("soil_flux_", input$date_range[1], "_", input$date_range[2], sep = "", ".svg")   
+             }
+             }
+         }
+         }
+       },
    content = function(file) {
-     ggsave(file, plot = ggplot_final(), device = "pdf", dpi = 300, height = 210, width = 297, units = "mm")
-   }
+     {if (input$download_extension == "pdf") {
+       ggsave(file, plot = ggplot_final(), device = "pdf", dpi = 300, height = 210, width = 297, units = "mm")
+       } else {
+         if (input$download_extension == "png") {
+         ggsave(file, plot = ggplot_final(), device = "png", dpi = 300, height = 210, width = 297, units = "mm", scale = 0.4)
+         } else {
+           if (input$download_extension == "svg") {
+             ggsave(file, plot = ggplot_final(), device = "svg", dpi = 300, height = 210, width = 297, units = "mm", scale = 0.4)
+           }
+         }
+       }
+     }
+     }
  )
-  
 }
