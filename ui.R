@@ -11,7 +11,7 @@ library(hrbrthemes)
 library(fontawesome)
 
 # download a webfont
-font_add_google(name = "Roboto Condensed", family = "Roboto Condensed",
+sysfonts::font_add_google(name = "Roboto Condensed", family = "Roboto Condensed",
                 regular.wt = 400, bold.wt = 700)
 showtext_auto()
 
@@ -55,7 +55,12 @@ fluidPage(
            uiOutput("ui"),
            br(),
            downloadButton("download_plot", 
-                          "Download final plot")
+                          "Download final plot"),
+           radioButtons("download_extension",
+                        label = "",
+                        choices = c("pdf" = "pdf", "png" = "png", "svg" = "svg"),
+                        selected = "pdf", 
+                        inline = TRUE)
     )
   )
 )
