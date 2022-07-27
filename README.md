@@ -14,7 +14,7 @@ Plotting of soil CO<sub>2</sub> and CH<sub>4</sub> emission changes based on con
 * [Where to try app](#where-to-try-app)
 
 ## Data upload
-Simply just upload **.txt** file obtained from the Trace Gas Analyzer ([see example txt file here](https://github.com/TlaskalV/Licor_app/blob/main/test_raw_data)). Any further table formatting is not necessary. Data can be easily filtered by date directly in the app.
+Simply just upload **.txt** file obtained from the Trace Gas Analyzer ([see example txt file here](https://github.com/TlaskalV/Licor_app/blob/master/test_raw_data)). Any further table formatting is not necessary. Data can be easily filtered by date directly in the app.
 
 ## Plot
 
