@@ -1,4 +1,4 @@
-# Soil flux visualization
+# Soil gas emission visualization
 Plotting of soil CO<sub>2</sub> and CH<sub>4</sub> emission changes based on concentrations measured with [LI-COR LI-7810 Trace Gas Analyzer](https://www.licor.com/env/products/soil_flux/LI-7810).
 
 
