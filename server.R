@@ -39,27 +39,52 @@ function(input, output) {
     dataset_date_filtered_mode_ok <- mutate(dataset_flux, date_joined_lubridated = lubridate::ymd_hms(paste(DATE, TIME), tz = "UTC")) %>% 
       dplyr::mutate(obs_count = dplyr::row_number())
   })
-  
-# ggplot  
- ggplot_final <- reactive({
+
+# rendering plot 
+ output$contents1 <- renderPlot({
    dataset_date_filtered_mode_ok <- dataset_date_filtered_mode_ok()
-   ggplot(data = dataset_date_filtered_mode_ok, aes(y = CH4, x = obs_count)) +
+   ggplot(data = dataset_date_filtered_mode_ok, aes(y = CH4, x = date_joined_lubridated)) +
      geom_point(size = 1, aes(colour = REMARK)) +
      theme(axis.text.x = element_text(angle = 90))
-   })
- 
-data <- reactive({
+ })
+
+  data <- reactive({
+  dataset_date_filtered_mode_ok <- dataset_date_filtered_mode_ok()
    brushedPoints(dataset_date_filtered_mode_ok, input$plot_brush)
  })
   
-# rendering plot 
- output$contents1 <- renderPlot({
-   ggplot_final()
- })
+### linear model
+  linear_model_ch4 <- reactive({
+    data <- data()
+    model_ch4 <- lm(data = data, CH4~obs_count)
+  })
+  
+  
+  linear_model_co2 <- reactive({
+    data <- data()
+    model_co2 <- lm(data = data, CO2~obs_count)
+  })
+  
+  out_linear_models <- reactive({
+    model_ch4 <- linear_model_ch4()
+    model_co2 <- linear_model_co2()
+    slope <- tidy(model_ch4) %>% 
+      filter(term == "obs_count") %>% 
+      mutate(gas = "ch4") %>% 
+      add_row(tidy(model_co2) %>% 
+                filter(term == "obs_count") %>% 
+                mutate(gas = "co2")) %>% 
+      select(-term)
+  })
  
  output$info <- renderTable({
    data()
    })
+ 
+ output$lm <- renderTable({
+   out_linear_models()
+ })
+ 
  
 output$table1 <- renderTable({ dataset_date_filtered_mode_ok() })
 
