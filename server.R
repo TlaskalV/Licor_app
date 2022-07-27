@@ -34,30 +34,32 @@ function(input, output) {
   })
   
 # merge daytime columns  
-  dataset_date_lubridated <- reactive({
+  dataset_date_filtered_mode_ok <- reactive({
     dataset_flux <- dataset_flux()
-    dataset_date_lubridated <- mutate(dataset_flux, date_joined_lubridated = lubridate::ymd_hms(paste(DATE, TIME), tz = "UTC"))
+    dataset_date_filtered_mode_ok <- mutate(dataset_flux, date_joined_lubridated = lubridate::ymd_hms(paste(DATE, TIME), tz = "UTC")) %>% 
+      dplyr::mutate(obs_count = dplyr::row_number())
   })
   
-# filter by date, +1 is important due to issues with timezone setting
-# filtering is based only on days
-  dataset_date_filtered_mode_ok <- reactive({
-   dataset_date_lubridated <- dataset_date_lubridated()
-   dataset_date_filtered_mode_ok <- dplyr::filter(dataset_date_lubridated, DATE >= as.vector(paste(input$date_range[1], input$time_range[1], sep = " ")) & DATE <= as.vector(paste((input$date_range[2]+1), input$time_range[2], sep = " ")))
-  })
- 
- # ggplot  
+# ggplot  
  ggplot_final <- reactive({
    dataset_date_filtered_mode_ok <- dataset_date_filtered_mode_ok()
-   ggplot(data = dataset_date_filtered_mode_ok, aes(y = CH4, x = date_joined_lubridated)) +
+   ggplot(data = dataset_date_filtered_mode_ok, aes(y = CH4, x = obs_count)) +
      geom_point(size = 1, aes(colour = REMARK)) +
      theme(axis.text.x = element_text(angle = 90))
    })
+ 
+data <- reactive({
+   brushedPoints(dataset_date_filtered_mode_ok, input$plot_brush)
+ })
   
 # rendering plot 
  output$contents1 <- renderPlot({
    ggplot_final()
  })
+ 
+ output$info <- renderTable({
+   data()
+   })
  
 output$table1 <- renderTable({ dataset_date_filtered_mode_ok() })
 

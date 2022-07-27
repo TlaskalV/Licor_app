@@ -12,7 +12,7 @@ library(fontawesome)
 fluidPage(
   theme = shinytheme("sandstone"),
   title = "Soil CO\u2082 flux data",
-  plotOutput("contents1") %>% withSpinner(type = getOption("spinner.type", default = 4)),
+  plotOutput("contents1", brush = "plot_brush") %>% withSpinner(type = getOption("spinner.type", default = 4)),
   hr(),
   fluidRow(
     column(3,
@@ -26,24 +26,7 @@ fluidPage(
     ),
     column(4, 
            h4("2."),
-           offset = 1,
-           dateRangeInput('date_range',
-                          label = list(icon("calendar-alt"), "Filter by date"),
-                          start = Sys.Date() - 3, end = Sys.Date(),
-                          separator = " to ", format = "yy-mm-dd",
-                          startview = 'month', language = 'en', weekstart = 1
-           ),
-           sliderInput(
-             "time_range",
-             label = "Select time",
-             min = lubridate::origin,
-             max = lubridate::origin + lubridate::days(1) - lubridate::seconds(1),
-             value = c(lubridate::origin, lubridate::origin + lubridate::days(1) - lubridate::seconds(1)),
-             step = 5 * 60,
-             timeFormat = "%H:%M",
-             timezone = "UTC",
-             ticks = TRUE
-           ),
+           tableOutput("info")
     ),
     column(4,
            h4("3."),
