@@ -32,4 +32,3 @@ install.packages(c("shiny", "shinythemes", "readr", "tidyverse", "Rmisc", "tools
 library(shiny)
 runGitHub("Licor_app", "TlaskalV")
 ```
-# Licor_app

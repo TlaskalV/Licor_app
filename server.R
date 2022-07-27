@@ -7,7 +7,7 @@ library(Rmisc)
 library(tools)
 require(showtext)
 library(svglite)
-
+library(broom)
 
 function(input, output) {
   
@@ -25,40 +25,42 @@ function(input, output) {
       setNames(c("DATAH",	"SECONDS",	"NANOSECONDS",	"NDX",	'DIAG',	'REMARK',	'DATE',	'TIME',	'H2O',	'CO2',	'CH4',	'CAVITY_P',	'CAVITY_T',	'LASER_PHASE_P',	'LASER_T',	'RESIDUAL',	'RING_DOWN_TIME',	'THERMAL_ENCLOSURE_T',	'PHASE_ERROR',	'LASER_T_SHIFT',	'INPUT_VOLTAGE',	'CHK'))
   })
 
-# get name of uploaded file
-  file_name <- reactive({
-    inFile <- input$csv_data
-    
-    if (is.null(inFile))
-      return(NULL) else return (tools::file_path_sans_ext(inFile$name))
-  })
-  
 # merge daytime columns  
   dataset_date_filtered_mode_ok <- reactive({
     dataset_flux <- dataset_flux()
     dataset_date_filtered_mode_ok <- mutate(dataset_flux, date_joined_lubridated = lubridate::ymd_hms(paste(DATE, TIME), tz = "UTC")) %>% 
-      dplyr::mutate(obs_count = dplyr::row_number())
+      dplyr::mutate(obs_count = dplyr::row_number()) %>% 
+      mutate(CH4_ppm = CH4/1000)
   })
 
 # rendering plot 
- output$contents1 <- renderPlot({
+ output$CH4_plot <- renderPlot({
    dataset_date_filtered_mode_ok <- dataset_date_filtered_mode_ok()
-   ggplot(data = dataset_date_filtered_mode_ok, aes(y = CH4, x = date_joined_lubridated)) +
+   ggplot(data = dataset_date_filtered_mode_ok, aes(y = CH4_ppm, x = date_joined_lubridated)) +
      geom_point(size = 1, aes(colour = REMARK)) +
-     theme(axis.text.x = element_text(angle = 90))
+     theme(axis.text.x = element_text(angle = 90),
+           axis.title.x = element_blank())
+ })
+ 
+ output$CO2_plot <- renderPlot({
+   dataset_date_filtered_mode_ok <- dataset_date_filtered_mode_ok()
+   ggplot(data = dataset_date_filtered_mode_ok, aes(y = CO2, x = date_joined_lubridated)) +
+     geom_point(size = 1, aes(colour = REMARK)) +
+     theme(axis.text.x = element_text(angle = 90),
+           axis.title.x = element_blank())
  })
 
+# brush filtering 
   data <- reactive({
   dataset_date_filtered_mode_ok <- dataset_date_filtered_mode_ok()
    brushedPoints(dataset_date_filtered_mode_ok, input$plot_brush)
  })
   
-### linear model
+# linear models
   linear_model_ch4 <- reactive({
     data <- data()
     model_ch4 <- lm(data = data, CH4~obs_count)
   })
-  
   
   linear_model_co2 <- reactive({
     data <- data()
@@ -70,22 +72,17 @@ function(input, output) {
     model_co2 <- linear_model_co2()
     slope <- tidy(model_ch4) %>% 
       filter(term == "obs_count") %>% 
-      mutate(gas = "ch4") %>% 
+      mutate(gas = "CH4") %>% 
       add_row(tidy(model_co2) %>% 
                 filter(term == "obs_count") %>% 
-                mutate(gas = "co2")) %>% 
-      select(-term)
+                mutate(gas = "CO2")) %>% 
+      select(-term) %>% 
+      relocate(gas, .before = estimate)
   })
- 
- output$info <- renderTable({
-   data()
-   })
  
  output$lm <- renderTable({
    out_linear_models()
- })
+ },
+ digits = 5)
  
- 
-output$table1 <- renderTable({ dataset_date_filtered_mode_ok() })
-
 }
