@@ -2,18 +2,18 @@
 Plotting of soil CO<sub>2</sub> and CH<sub>4</sub> emission changes based on concentrations measured with [LI-COR LI-7810 Trace Gas Analyzer](https://www.licor.com/env/products/soil_flux/LI-7810).
 
 
-<div align="right">
-    <img src="/gif_app.gif?raw=true" width="400px"</img>
+<div align="left">
+    <img src="/gif_app.gif?raw=true" width="1000px"</img>
 </div>
 
 
 ## Table of contents
 
-* [How to upload data](#data-upload)
+* [Instructions](#instructions)
 * [Example plot](#example-plot)
 * [Where to try app](#where-to-try-app)
 
-## Data upload
+## Instructions
 Simply just upload **.txt** file obtained from the Trace Gas Analyzer (see example txt file in this repo). Any further table formatting is not necessary.
 
 1. Upload data
