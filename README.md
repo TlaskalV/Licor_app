@@ -3,7 +3,7 @@ Plotting of soil CO<sub>2</sub> and CH<sub>4</sub> emission changes based on con
 
 
 <div align="right">
-    <img src="/licor.jpg?raw=true" width="300px"</img>
+    <img src="/gif_app.gif?raw=true" width="400px"</img>
 </div>
 
 
