@@ -14,7 +14,11 @@ Plotting of soil CO<sub>2</sub> and CH<sub>4</sub> emission changes based on con
 * [Where to try app](#where-to-try-app)
 
 ## Data upload
-Simply just upload **.txt** file obtained from the Trace Gas Analyzer (see example txt file in this repo). Any further table formatting is not necessary. Data can be easily filtered by date directly in the app.
+Simply just upload **.txt** file obtained from the Trace Gas Analyzer (see example txt file in this repo). Any further table formatting is not necessary.
+
+1. Upload data
+2. Select area of interest in the upper plot
+3. See statistics of linear regression
 
 ## Plot
 
